@@ -8,39 +8,38 @@ use SQL::Abstract::Tree;
 use Try::Tiny;
 use 5.18.0;
 
-BEGIN { say '<html><head><title>DBIC test</title><head><body>' }
-END { say '</body></html>' }
+BEGIN { say '=head1 DBIC test';say '' }
+END { say '=cut';say '' }
 
 # this is just for debug dump
 sub XX($$) {
     my ($title,$rs) = @_;
 
     state $tree = SQL::Abstract::Tree->new({
-        profile=>'html',
+        profile=>'console_monochrome',
         fill_in_placeholders => 1,
     });
 
-    say '<hr />';
-    say "<h1>$title</h1>";
-    say '<h2>resultset:</h2>';
+    say "=head2 $title";say '';
+    say '=head3 resultset:';say '';
 
     try {
         my ($q,@bind) = @{${$rs->as_query}};
         @bind = map { $_->[1] || '0e0' } @bind;
-        say '<code>'.$tree->format($q,\@bind).'</code>';
+        say $tree->format($q,\@bind) =~ s{^}{  }mgr;
     } catch {
-        say "<p>could not build query: <pre>$_</pre></p>";
+        say 'B<could not build query>:';say '';
+        say "  $_";
     };
 
-    say '<hr />';
-    say '<h2>Running it:</h2>';
+    say '';say '=head2 Running it:';say '';
     try {
         my @ret = $rs->all;
-        say '<p>ok</p>';
+        say 'ok';
     } catch {
-        say "<p>could not run it: <pre>$_</pre></p>";
+        say 'B<could not run it>';say '';
+        say "  $_";
     };
-    say '<hr />';
     say '';
 }
 
