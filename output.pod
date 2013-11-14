@@ -154,17 +154,32 @@ ok
 
 =head3 resultset:
 
-B<could not build query>:
-
-  DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 27
-
+  ( 
+      SELECT me.id, me.name, me.clan_id, subs.id, subs.main_id, subs.name 
+        FROM ( 
+          SELECT me.id, me.name, me.clan_id 
+            FROM main me 
+            JOIN clan clan 
+              ON clan.id = me.clan_id 
+            LEFT JOIN subs subs 
+              ON subs.main_id = me.id 
+          WHERE subs.name = ?/bar 
+          GROUP BY me.id, me.name, me.clan_id, clan.name 
+          ORDER BY clan.name ASC 
+            LIMIT ?/5 
+            OFFSET ?/1
+         ) me 
+        JOIN clan clan 
+          ON clan.id = me.clan_id 
+        LEFT JOIN subs subs 
+          ON subs.main_id = me.id 
+      WHERE subs.name = ?/bar 
+      ORDER BY clan.name ASC
+     )
 
 =head3 Running it:
 
-B<could not run it>
-
-  DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 37
-
+ok
 
 =head2 5. all of it, different prefetch/join not sliced
 
@@ -189,17 +204,32 @@ ok
 
 =head3 resultset:
 
-B<could not build query>:
-
-  DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 27
-
+  ( 
+      SELECT me.id, me.name, me.clan_id, clan.id, clan.name 
+        FROM ( 
+          SELECT me.id, me.name, me.clan_id 
+            FROM main me 
+            LEFT JOIN subs subs 
+              ON subs.main_id = me.id 
+            JOIN clan clan 
+              ON clan.id = me.clan_id 
+          WHERE subs.name = ?/bar 
+          GROUP BY me.id, me.name, me.clan_id, clan.name 
+          ORDER BY clan.name ASC 
+            LIMIT ?/5 
+            OFFSET ?/1
+         ) me 
+        LEFT JOIN subs subs 
+          ON subs.main_id = me.id 
+        JOIN clan clan 
+          ON clan.id = me.clan_id 
+      WHERE subs.name = ?/bar 
+      ORDER BY clan.name ASC
+     )
 
 =head3 Running it:
 
-B<could not run it>
-
-  DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 37
-
+ok
 
 =cut
 
