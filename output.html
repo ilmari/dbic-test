@@ -1,0 +1,185 @@
+<html><head><title>DBIC test</title><head><body>
+<hr />
+<h1>1. no criterion not sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id, subs.id, subs.main_id, subs.name <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC<br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>1. no criterion sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id, subs.id, subs.main_id, subs.name <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> ( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="limit">LIMIT</span> <span class="placeholder">5</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="offset">OFFSET</span> <span class="placeholder">1</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC<br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>2. no prefetch not sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC<br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>2. no prefetch sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="limit">LIMIT</span> <span class="placeholder">5</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="offset">OFFSET</span> <span class="placeholder">1</span><br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>3. no order_by not sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id, subs.id, subs.main_id, subs.name <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span><br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>3. no order_by sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id, subs.id, subs.main_id, subs.name <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> ( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="group-by">GROUP BY</span> me.id, me.name, me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="limit">LIMIT</span> <span class="placeholder">5</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="offset">OFFSET</span> <span class="placeholder">1</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ) me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span><br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>4. all of it not sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id, subs.id, subs.main_id, subs.name <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC<br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>4. all of it sliced</h1>
+<h2>resultset:</h2>
+<p>could not build query: <pre>DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 28
+</pre></p>
+<hr />
+<h2>Running it:</h2>
+<p>could not run it: <pre>DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 38
+</pre></p>
+<hr />
+
+<hr />
+<h1>5. all of it, different prefetch/join not sliced</h1>
+<h2>resultset:</h2>
+<code>( <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="select">SELECT</span> me.id, me.name, me.clan_id, clan.id, clan.name <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="from">FROM</span> main me <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="left-join">LEFT JOIN</span> subs subs <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> subs.main_id = me.id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="join">JOIN</span> clan clan <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="on">ON</span> clan.id = me.clan_id <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="where">WHERE</span> subs.name = <span class="placeholder">bar</span> <br />
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="order-by">ORDER BY</span> clan.name ASC<br />
+&nbsp;&nbsp; )</code>
+<hr />
+<h2>Running it:</h2>
+<p>ok</p>
+<hr />
+
+<hr />
+<h1>5. all of it, different prefetch/join sliced</h1>
+<h2>resultset:</h2>
+<p>could not build query: <pre>DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 28
+</pre></p>
+<hr />
+<h2>Running it:</h2>
+<p>could not run it: <pre>DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 38
+</pre></p>
+<hr />
+
+</body></html>
