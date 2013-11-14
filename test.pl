@@ -32,7 +32,7 @@ sub XX($$) {
         say "  $_";
     };
 
-    say '';say '=head2 Running it:';say '';
+    say '';say '=head3 Running it:';say '';
     try {
         my @ret = $rs->all;
         say 'ok';

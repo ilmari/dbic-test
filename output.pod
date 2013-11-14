@@ -14,7 +14,7 @@
       ORDER BY clan.name ASC
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -40,7 +40,7 @@ ok
       ORDER BY clan.name ASC
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -59,7 +59,7 @@ ok
       ORDER BY clan.name ASC
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -80,7 +80,7 @@ ok
         OFFSET ?/1
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -98,7 +98,7 @@ ok
       WHERE subs.name = ?/bar
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -127,7 +127,7 @@ ok
       WHERE subs.name = ?/bar
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -146,7 +146,7 @@ ok
       ORDER BY clan.name ASC
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -159,7 +159,7 @@ B<could not build query>:
   DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 27
 
 
-=head2 Running it:
+=head3 Running it:
 
 B<could not run it>
 
@@ -181,7 +181,7 @@ B<could not run it>
       ORDER BY clan.name ASC
      )
 
-=head2 Running it:
+=head3 Running it:
 
 ok
 
@@ -194,7 +194,7 @@ B<could not build query>:
   DBIx::Class::Storage::DBIHacks::_adjust_select_args_for_complex_prefetch(): A required group_by clause could not be constructed automatically due to a complex order_by criteria. Either order_by columns only (no functions) or construct a suitable group_by by hand at test.pl line 27
 
 
-=head2 Running it:
+=head3 Running it:
 
 B<could not run it>
 
