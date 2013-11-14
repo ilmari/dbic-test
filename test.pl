@@ -7,6 +7,7 @@ use Data::Printer;
 use SQL::Abstract::Tree;
 use 5.18.0;
 
+# this is just for debug dump
 sub XX($) {
     my ($rs) = @_;
 
@@ -32,6 +33,7 @@ my $rs = $schema->resultset('Main')->search({
     'subs.name' => 'bar',
 },{
     prefetch => [ 'subs', 'clan' ],
+    # if you uncomment this order_by, DBIC barfs
     #order_by => { -asc => 'clan.name' },
 })->slice(1,5);
 
