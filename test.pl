@@ -8,33 +8,39 @@ use SQL::Abstract::Tree;
 use Try::Tiny;
 use 5.18.0;
 
+BEGIN { say '<html><head><title>DBIC test</title><head><body>' }
+END { say '</body></html>' }
+
 # this is just for debug dump
 sub XX($$) {
     my ($title,$rs) = @_;
 
     state $tree = SQL::Abstract::Tree->new({
-        profile=>'console',
+        profile=>'html',
         fill_in_placeholders => 1,
     });
 
-    say '-'x30;
-    say "$title resultset:";
+    say '<hr />';
+    say "<h1>$title</h1>";
+    say '<h2>resultset:</h2>';
 
     try {
         my ($q,@bind) = @{${$rs->as_query}};
         @bind = map { $_->[1] || '0e0' } @bind;
-        say $tree->format($q,\@bind);
+        say '<code>'.$tree->format($q,\@bind).'</code>';
     } catch {
-        say "could not build query: $_";
+        say "<p>could not build query: <pre>$_</pre></p>";
     };
-    say '-'x30;
-    say 'Running it';
+
+    say '<hr />';
+    say '<h2>Running it:</h2>';
     try {
         my @ret = $rs->all;
+        say '<p>ok</p>';
     } catch {
-        say "could not run it: $_";
+        say "<p>could not run it: <pre>$_</pre></p>";
     };
-    say '-'x30;
+    say '<hr />';
     say '';
 }
 
