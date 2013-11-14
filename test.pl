@@ -28,13 +28,44 @@ sub XX($) {
 my $schema = My::Schema->connect('dbi:SQLite:dbname=:memory:','','');
 $schema->deploy;
 
+=pod
+
+If you restrict across a has_many, order across a belongs_to,
+prefetch the has_many, then slice, DBIC barfs
+
+This works if:
+
+=over 4
+
+=item *
+
+you remove the search criterion
+
+=item *
+
+you C<join> instead of C<prefetcH>
+
+=item *
+
+you C<prefetch> only C<clan>
+
+=item *
+
+you remove the C<order_by>
+
+=item *
+
+you remove the C<slice>
+
+=back
+
+=cut
+
 my $rs = $schema->resultset('Main')->search({
-    'clan.name' => 'foo',
     'subs.name' => 'bar',
 },{
-    prefetch => [ 'subs', 'clan' ],
-    # if you uncomment this order_by, DBIC barfs
-    #order_by => { -asc => 'clan.name' },
+    prefetch => [ 'subs' ],
+    order_by => { -asc => 'clan.name' },
 })->slice(1,5);
 
 XX $rs;
